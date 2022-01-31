@@ -1,6 +1,17 @@
 const express = require('express');
+// 2h0Btsgd87yU6InE
+// "mongodb+srv://NerVod:2h0Btsgd87yU6InE@cluster0.aykvr.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+//mongodb+srv://<username>:<password>@cluster0.aykvr.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
 
 const app = express();
+const mongoose = require('mongoose');
+mongoose.connect("mongodb+srv://Benjamin:fpQH9Skw4tRlYoyB@cluster0.aykvr.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+{   
+    useNewUrlParser : true,
+    unseUnifiedTopology: true,
+})
+    .then(() => console.log('Connexion à MongoDB réussie !'))
+    .catch(() => console.log('Uhh... , Erreur de connexion à MongoDB !'))
 
 app.use(express.json());
 
