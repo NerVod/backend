@@ -20,6 +20,6 @@
   "description": "",
   "dependencies": {
     "express": "^4.17.2",
-    "mongoose": "^6.1.9"
+    "mongoose": "^6.2.0"
   }
 }
