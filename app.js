@@ -1,15 +1,18 @@
 const express = require("express");
-// "mongodb+srv://NerVod:yHv8m.?qX3h@SdC@cluster0.oyrz5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+const bodyParser = require('body-parser');
+const mongoose = require("mongoose");
+const Thing = require("./models/Thing");
+
+mongoose
+  .connect(
+    "mongodb+srv://NorthKing:MotDePasseMongo@test.ovk3a.mongodb.net/test?retryWrites=true&w=majority",
+    { useNewUrlParser: true, useUnifiedTopology: true }
+  )
+  .then(() => console.log("Connexion à MongoDB réussie !"))
+  .catch(() => console.log("Connexion à MongoDB échouée !"));
 
 const app = express();
-const mongoose = require("mongoose");
-mongoose.connect('mongodb+srv://NorthKing:MotDePasseMongo@test.ovk3a.mongodb.net/test?retryWrites=true&w=majority',
-  { useNewUrlParser: true,
-    useUnifiedTopology: true })
-  .then(() => console.log('Connexion à MongoDB réussie !'))
-  .catch(() => console.log('Connexion à MongoDB échouée !'));
 
-app.use(express.json());
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -20,18 +23,26 @@ app.use((req, res, next) => {
   res.setHeader(
     "Access-Control-Allow-Methods",
     "GET, POST, PUT, DELETE, PATCH, OPTIONS"
-  );
-  next();
-});
-
-app.post("/api/stuff", (req, res, next) => {
-  console.log("la requête du post :", req.body);
-  res.status(201).json({
-    message: "objet créé !",
+    );
+    next();
   });
-});
+  
+  
+  app.post("/api/stuff", (req, res, next) => {
+  delete req.body._id;
+  const thing = new Thing({
+      ...req.body,
+    });
+    thing
+      .save()
+      .then(() => res.status(201).json({ message: "objet enregistré !" }))
+      .catch((error) => res.status(400).json({ error }));
+    
+  });
 
-app.get("/api/stuff", (req, res, next) => {
+  app.use(bodyParser.json());
+
+app.use("/api/stuff", (req, res, next) => {
   const stuff = [
     {
       _id: "oeihfzeoi",
